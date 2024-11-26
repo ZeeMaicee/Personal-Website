@@ -297,51 +297,26 @@
       </div>
     </section>
 
-    <!-- Comment Section -->
-    <section id="comments" class="comments py-5">
-      <div class="container" data-aos="fade-up" data-aos-duration="1000">
-        <h2 class="text-center">Comments</h2>
-        <div class="row mt-4">
-          <!-- Comment Form -->
-          <div class="col-md-8 mx-auto">
-            <form id="comment-form">
-              <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="name"
-                  placeholder="Enter your name"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="comment" class="form-label">Comment</label>
-                <textarea
-                  class="form-control"
-                  id="comment"
-                  rows="4"
-                  placeholder="Write your comment here"
-                  required
-                ></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">
-                Post Comment
-              </button>
-            </form>
-          </div>
-        </div>
-        <!-- Display Comments -->
-        <div class="row mt-4">
-          <div class="col-md-8 mx-auto">
-            <h5>Comments:</h5>
-            <ul id="comment-list" class="list-unstyled">
-              <!-- Comments will appear here -->
-            </ul>
-          </div>
-        </div>
+<!-- Kolom Komentar -->
+<section id="comments" class="comments py-5">
+  <div class="container" data-aos="fade-up" data-aos-duration="1000">
+    <h2 class="text-center">Comments</h2>
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div id="comment-section"></div>
+        <textarea
+          id="comment-input"
+          class="form-control my-3"
+          rows="3"
+          placeholder="Write your comment here..."
+        ></textarea>
+        <button id="submit-comment" class="btn btn-primary w-100">
+          Submit Comment
+        </button>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -361,32 +336,49 @@
     </script>
 
     <!-- Comment -->
-    <script>
-      // Handle comment form submission
-      document
-        .getElementById("comment-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent default form submission
+   <script>
+  // Fungsi untuk menyimpan komentar ke Local Storage
+  function saveComments(comments) {
+    localStorage.setItem('comments', JSON.stringify(comments));
+  }
 
-          // Get user input
-          const name = document.getElementById("name").value;
-          const comment = document.getElementById("comment").value;
+  // Fungsi untuk memuat komentar dari Local Storage
+  function loadComments() {
+    const comments = localStorage.getItem('comments');
+    return comments ? JSON.parse(comments) : [];
+  }
 
-          // Create a new comment element
-          const commentItem = document.createElement("li");
-          commentItem.classList.add("mb-3", "border-bottom", "pb-2");
-          commentItem.innerHTML = `
-          <strong>${name}</strong>
-          <p>${comment}</p>
-        `;
+  // Fungsi untuk menampilkan komentar
+  function displayComments(comments) {
+    const commentSection = document.getElementById('comment-section');
+    commentSection.innerHTML = '';
+    comments.forEach((comment, index) => {
+      const commentElement = document.createElement('div');
+      commentElement.className = 'comment my-2 p-2 border rounded';
+      commentElement.innerHTML = `<strong>Comment ${index + 1}:</strong> ${comment}`;
+      commentSection.appendChild(commentElement);
+    });
+  }
 
-          // Append the comment to the comment list
-          document.getElementById("comment-list").appendChild(commentItem);
+  // Event listener untuk tombol submit
+  document.getElementById('submit-comment').addEventListener('click', () => {
+    const commentInput = document.getElementById('comment-input');
+    const commentText = commentInput.value.trim();
+    if (commentText) {
+      const comments = loadComments();
+      comments.push(commentText);
+      saveComments(comments);
+      displayComments(comments);
+      commentInput.value = ''; // Kosongkan input
+    }
+  });
 
-          // Clear the form
-          document.getElementById("comment-form").reset();
-        });
-    </script>
+  // Load dan tampilkan komentar saat halaman dimuat
+  document.addEventListener('DOMContentLoaded', () => {
+    const comments = loadComments();
+    displayComments(comments);
+  });
+</script>
 
     <!-- Bootstrap JS -->
     <script>
