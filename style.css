@@ -137,6 +137,95 @@ body {
   padding-bottom: 5rem;
 }
 
+/* Container utama */
+.comments {
+  background-color: #f8f9fa; /* Warna latar belakang */
+  padding: 2rem 1rem;
+  border-radius: 8px;
+}
+
+/* Judul bagian komentar */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Formulir komentar */
+.comment-form {
+  max-width: 600px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+/* Input dan textarea */
+.comment-form .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.comment-form .form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Tombol kirim */
+.comment-form .btn-primary {
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.comment-form .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Bagian komentar */
+#comment-section {
+  max-width: 800px;
+  margin: 2rem auto 0;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+#comment-section h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* Komentar */
+#comment-section div {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+#comment-section div:last-child {
+  border-bottom: none;
+}
+
+#comment-section p {
+  margin: 0;
+}
+
+#comment-section strong {
+  color: #007bff;
+}
+
 
 /* Media Query */
 /* Laptop */
