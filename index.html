@@ -298,36 +298,19 @@
     </section>
 
     <!-- Kolom Komentar -->
-<section id="comments" class="comments py-5">
-  <div class="container" data-aos="fade-up" data-aos-duration="1000">
-    <h2 class="section-title text-center mb-4"> Kasi Akuu Komentar :)</h2>
-    <div class="comment-form bg-light p-4 rounded shadow-sm">
-      <input
-        type="text"
-        id="name"
-        placeholder="Nama Anda"
-        class="form-control mb-3"
-      />
-      <textarea
-        id="comment"
-        placeholder="Tulis komentar Anda..."
-        class="form-control mb-3"
-        rows="4"
-      ></textarea>
-      <button
-        onclick="submitComment()"
-        class="btn btn-primary w-100"
-      >
-        Kirim Komentar
-      </button>
-    </div>
-    <div id="comment-section" class="mt-5">
-      <h3 class="text-center">Komentar :</h3>
-      <!-- Komentar akan muncul di sini -->
-    </div>
-  </div>
-</section>
-
+    <section id="comments" class="comments py-5">
+      <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <div>
+          <input type="text" id="name" placeholder="Nama" />
+          <textarea
+            id="comment"
+            placeholder="Tulis komentar Anda..."
+          ></textarea>
+          <button onclick="submitComment()">Kirim</button>
+        </div>
+        <div id="comment-section"></div>
+      </div>
+    </section>
 
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -349,19 +332,58 @@
     <!-- Comment -->
     <script>
       function submitComment() {
-        const name = document.getElementById("name").value;
-        const comment = document.getElementById("comment").value;
-        if (name && comment) {
-          saveComment(name, comment);
-          document.getElementById("name").value = "";
-          document.getElementById("comment").value = "";
-        } else {
-          alert("Harap isi nama dan komentar!");
+        // Ambil nilai dari input
+        const name = document.getElementById("name").value.trim();
+        const comment = document.getElementById("comment").value.trim();
+
+        // Validasi input
+        if (name === "" || comment === "") {
+          alert("Nama dan komentar tidak boleh kosong!");
+          return;
         }
+
+        // Data yang akan dikirim ke Firebase
+        const commentData = {
+          name: name,
+          comment: comment,
+          timestamp: new Date().toISOString(),
+        };
+
+        // Push data ke Firebase
+        database.ref("comments").push(commentData, (error) => {
+          if (error) {
+            alert("Terjadi kesalahan: " + error.message);
+          } else {
+            alert("Komentar berhasil dikirim!");
+            // Kosongkan input setelah berhasil
+            document.getElementById("name").value = "";
+            document.getElementById("comment").value = "";
+          }
+        });
       }
 
-      // Muat komentar saat halaman dimuat
-      loadComments();
+      function loadComments() {
+        const commentSection = document.getElementById("comment-section");
+
+        database.ref("comments").on("value", (snapshot) => {
+          commentSection.innerHTML = ""; // Kosongkan sebelum menampilkan
+          const comments = snapshot.val();
+
+          for (let id in comments) {
+            const { name, comment, timestamp } = comments[id];
+            const commentElement = document.createElement("div");
+            commentElement.classList.add("comment");
+            commentElement.innerHTML = `
+        <strong>${name}</strong> (${new Date(timestamp).toLocaleString()}):
+        <p>${comment}</p>
+      `;
+            commentSection.appendChild(commentElement);
+          }
+        });
+      }
+
+      // Panggil fungsi loadComments saat halaman dimuat
+      window.onload = loadComments;
     </script>
 
     <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
@@ -372,7 +394,7 @@
       const firebaseConfig = {
         apiKey: "AIzaSyBOcgm0C4NmSetc-R1oZWZL5-rBMaqTZZ0",
         authDomain: "personal-website-a8587.firebaseapp.com",
-        databaseURL: "https://personal-website-a8587-default-rtdb.firebaseio.com/",
+        databaseURL: "https://personal-website-a8587.firebaseapp.com",
         projectId: "personal-website-a8587",
         storageBucket: "personal-website-a8587.firebasestorage.app",
         messagingSenderId: "868379799058",
