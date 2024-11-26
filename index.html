@@ -297,21 +297,6 @@
       </div>
     </section>
 
-    <!-- Kolom Komentar -->
-    <section id="comments" class="comments py-5">
-      <div class="container" data-aos="fade-up" data-aos-duration="1000">
-        <div>
-          <input type="text" id="name" placeholder="Nama" />
-          <textarea
-            id="comment"
-            placeholder="Tulis komentar Anda..."
-          ></textarea>
-          <button onclick="submitComment()">Kirim</button>
-        </div>
-        <div id="comment-section"></div>
-      </div>
-    </section>
-
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -327,63 +312,6 @@
           document.body.classList.remove("locked");
           document.getElementById("background-music").play();
         });
-    </script>
-
-    <!-- Comment -->
-    <script>
-      function submitComment() {
-        // Ambil nilai dari input
-        const name = document.getElementById("name").value.trim();
-        const comment = document.getElementById("comment").value.trim();
-
-        // Validasi input
-        if (name === "" || comment === "") {
-          alert("Nama dan komentar tidak boleh kosong!");
-          return;
-        }
-
-        // Data yang akan dikirim ke Firebase
-        const commentData = {
-          name: name,
-          comment: comment,
-          timestamp: new Date().toISOString(),
-        };
-
-        // Push data ke Firebase
-        database.ref("comments").push(commentData, (error) => {
-          if (error) {
-            alert("Terjadi kesalahan: " + error.message);
-          } else {
-            alert("Komentar berhasil dikirim!");
-            // Kosongkan input setelah berhasil
-            document.getElementById("name").value = "";
-            document.getElementById("comment").value = "";
-          }
-        });
-      }
-
-      function loadComments() {
-        const commentSection = document.getElementById("comment-section");
-
-        database.ref("comments").on("value", (snapshot) => {
-          commentSection.innerHTML = ""; // Kosongkan sebelum menampilkan
-          const comments = snapshot.val();
-
-          for (let id in comments) {
-            const { name, comment, timestamp } = comments[id];
-            const commentElement = document.createElement("div");
-            commentElement.classList.add("comment");
-            commentElement.innerHTML = `
-        <strong>${name}</strong> (${new Date(timestamp).toLocaleString()}):
-        <p>${comment}</p>
-      `;
-            commentSection.appendChild(commentElement);
-          }
-        });
-      }
-
-      // Panggil fungsi loadComments saat halaman dimuat
-      window.onload = loadComments;
     </script>
 
     <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js"></script>
